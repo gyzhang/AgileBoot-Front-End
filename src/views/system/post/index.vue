@@ -4,16 +4,15 @@ import { usePostHook } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-import Delete from "@iconify-icons/ep/delete";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
-import { useUserStoreHook } from "@/store/modules/user";
-// TODO 这个导入声明好长  看看如何优化
-import { CommonUtils } from "@/utils/common";
-import PostFormModal from "@/views/system/post/post-form-modal.vue";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import { PostPageResponse } from "@/api/system/post";
 import AddFill from "@iconify-icons/ri/add-circle-line";
+import EditPen from "@iconify-icons/ep/edit-pen";
+import Delete from "@iconify-icons/ep/delete";
+import PostFormModal from "@/views/system/post/post-form-modal.vue";
+import { PostPageResponse } from "@/api/system/post";
+import { CommonUtils } from "@/utils/common";
+import { useUserStoreHook } from "@/store/modules/user";
 
 /** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
@@ -21,9 +20,7 @@ defineOptions({
 });
 
 const loginLogStatusList = useUserStoreHook().dictionaryList["common.status"];
-
 const tableRef = ref();
-
 const searchFormRef = ref();
 const {
   searchFormParams,
@@ -73,7 +70,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
       <el-form-item label="岗位名称" prop="postName">
         <el-input
           v-model="searchFormParams.postName"
-          placeholder="请选择岗位名称"
+          placeholder="请输入岗位名称"
           clearable
           class="!w-[200px]"
         />
@@ -123,7 +120,6 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
       </el-form-item>
     </el-form>
 
-    <!-- table bar 包裹  table -->
     <PureTableBar title="岗位列表" :columns="columns" @refresh="onSearch">
       <!-- 表格操作栏 -->
       <template #buttons>
@@ -143,7 +139,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
         </el-button>
         <el-button
           type="primary"
-          @click="CommonUtils.exportExcel(columns, dataList, '岗位列表')"
+          @click="CommonUtils.exportExcel(columns, dataList, '岗位列表(单页)')"
           >单页导出</el-button
         >
         <el-button type="primary" @click="exportAllExcel">全部导出</el-button>
@@ -186,7 +182,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
               编辑
             </el-button>
             <el-popconfirm
-              :title="`是否确认删除编号为${row.postId}的这个岗位`"
+              :title="`是否确认删除编号为${row.postId}的这个岗位？`"
               @confirm="handleDelete(row)"
             >
               <template #reference>

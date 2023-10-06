@@ -115,25 +115,19 @@ export function usePostHook() {
 
   function onSortChanged(sort: Sort) {
     sortState.value = sort;
-    // 表格列的排序变化的时候，需要重置分页
     pagination.currentPage = 1;
     getPostList();
   }
 
   async function onSearch(tableRef) {
-    // 点击搜索的时候，需要重置排序，重新排序的时候会重置分页并发起查询请求
     tableRef.getTableRef().sort("postSort", "ascending");
   }
 
   function resetForm(formEl, tableRef) {
     if (!formEl) return;
-    // 清空查询参数
     formEl.resetFields();
-    // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
-    // Form组件的resetFields方法无法清除datepicker里面的数据。
     searchFormParams.beginTime = undefined;
     searchFormParams.endTime = undefined;
-    // 重置分页并查询
     onSearch(tableRef);
   }
 
@@ -158,7 +152,7 @@ export function usePostHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xlsx");
+    exportPostExcelApi(toRaw(searchFormParams), "岗位列表(全部).xlsx");
   }
 
   async function handleDelete(row) {
@@ -166,7 +160,6 @@ export function usePostHook() {
       message(`您删除了编号为${row.postId}的这条岗位数据`, {
         type: "success"
       });
-      // 刷新列表
       getPostList();
     });
   }
@@ -178,7 +171,7 @@ export function usePostHook() {
     }
 
     ElMessageBox.confirm(
-      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的岗位数据吗?`,
+      `确认要<strong style='color:var(--el-color-danger)'>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的岗位数据吗?`,
       "系统提示",
       {
         confirmButtonText: "确定",
@@ -201,7 +194,6 @@ export function usePostHook() {
         message("取消删除", {
           type: "info"
         });
-        // 清空checkbox选择的数据
         tableRef.getTableRef().clearSelection();
       });
   }
@@ -220,7 +212,6 @@ export function usePostHook() {
     onSearch,
     onSortChanged,
     exportAllExcel,
-    // exportExcel,
     getPostList,
     resetForm,
     handleDelete,

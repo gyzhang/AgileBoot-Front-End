@@ -3,8 +3,8 @@ import VDialog from "@/components/VDialog/VDialog.vue";
 import { computed, reactive, ref } from "vue";
 import {
   AddPostCommand,
-  PostPageResponse,
   UpdatePostCommand,
+  PostPageResponse,
   addPostApi,
   updatePostApi
 } from "@/api/system/post";
@@ -36,7 +36,7 @@ const formData = reactive<AddPostCommand | UpdatePostCommand>({
   postName: "",
   postSort: 1,
   remark: "",
-  status: ""
+  status: "1"
 });
 
 const statusList = useUserStoreHook().dictionaryMap["common.status"];
@@ -96,7 +96,7 @@ async function handleConfirm() {
     show-full-screen
     :fixed-body-height="false"
     use-body-scrolling
-    :title="type === 'add' ? '新增岗位' : '更新岗位'"
+    :title="type === 'add' ? '新增岗位' : '修改岗位'"
     v-model="visible"
     :loading="loading"
     @confirm="handleConfirm"
@@ -104,11 +104,11 @@ async function handleConfirm() {
     @opened="handleOpened"
   >
     <el-form :model="formData" label-width="120px" :rules="rules" ref="formRef">
-      <el-form-item prop="postName" label="岗位名称" required inline-message>
-        <el-input v-model="formData.postName" />
-      </el-form-item>
       <el-form-item prop="postCode" label="岗位编码" required>
         <el-input v-model="formData.postCode" />
+      </el-form-item>
+      <el-form-item prop="postName" label="岗位名称" required inline-message>
+        <el-input v-model="formData.postName" />
       </el-form-item>
       <el-form-item prop="postSort" label="岗位顺序" required>
         <el-input-number :min="1" v-model="formData.postSort" />

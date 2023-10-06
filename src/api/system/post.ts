@@ -7,14 +7,14 @@ export interface PostListCommand extends BasePageQuery {
 }
 
 export interface PostPageResponse {
-  createTime: string;
-  postCode: string;
   postId: number;
+  postCode: string;
   postName: string;
   postSort: number;
-  remark: string;
   status: number;
   statusStr: string;
+  remark: string;
+  createTime: string;
 }
 
 export function getPostListApi(params: PostListCommand) {
@@ -39,7 +39,6 @@ export const exportPostExcelApi = (
 export const deletePostApi = (data: Array<number>) => {
   return http.request<ResponseData<void>>("delete", "/system/post", {
     params: {
-      // 需要将数组转换为字符串  否则Axios会将参数变成 noticeIds[0]:1  noticeIds[1]:2 这种格式，后端接收参数不成功
       ids: data.toString()
     }
   });
